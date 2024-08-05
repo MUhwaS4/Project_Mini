@@ -23,9 +23,11 @@ public class OrderPro {
 		
 
 		// 프로그램 시작 시 주문 번호 초기화
-		Order.OrderCount();
+		// 저장된 번호 중 가장 마지막 번호를 불러옴
+		Order.OrderNumCheck();
 		
 		// 주문 정보를 저장할 txt 파일 생성
+		// 파일명 뒤에 true 추가할 경우 [덮어쓰기]가 아니라 [이어쓰기]가 됨
 		FileWriter fw = new FileWriter("order.txt", true);
 		
 		Scanner scanner = new Scanner(System.in);
@@ -149,25 +151,41 @@ class Order {
 		num = count;
 	}
 	
-	public static void OrderCount() {
-		try (BufferedReader br = new BufferedReader(new FileReader("order.txt"))) {
-			String line;
-			int lastOrderNum = 0;
+	public static void OrderNumCheck() throws IOException {
+		
+		// 읽어올 파일 선언 (줄 단위)
+		FileReader fr = new FileReader("order.txt");
+		BufferedReader br = new BufferedReader(fr);
+	
+		// 카운트 번호를 저장할 값 선언
+		int numLast = 0;
+		
+		while (true) {
+			String lineString = br.readLine();
 
-			while ((line = br.readLine()) != null) {
-				// 주문 번호를 파싱해서 읽어오기
-				String[] parts = line.split(", ");
-				for (String part : parts) {
-					if (part.startsWith("주문 번호: ")) {
-						lastOrderNum = Integer.parseInt(part.replace("주문 번호: ", ""));
-					}
+			// 만약 txt 파일에 데이터가 없다면 진행 ×
+			if (lineString == null) {
+				break;
+			}
+			
+			// 데이터가 있다면 항목별로 자르기
+			String[] parts = lineString.split(", ");
+			
+			// 자른 데이터를 반복하면서 [주문 번호] 데이터 확인
+			for (int i = 0;i<parts.length;i++) {
+				String info = parts[i];
+				
+				// 만약 info 변수가 주문 번호로 시작한다면
+				// 배열로 자르고 숫자가 들어있는 2를 값으로 저장
+				if (info.startsWith("주문 번호")) {
+					String[] numCut = info.split(": ");
+					numLast = Integer.parseInt(numCut[1]);
 				}
 			}
-			count = lastOrderNum;
-		} catch (IOException e) {
-			// order.txt 파일이 없는 경우 예외 처리
-			count = 0;
 		}
+		
+		// 이후 저장된 값을 카운트에 저장
+		count = numLast;
 		
 	}
 	
