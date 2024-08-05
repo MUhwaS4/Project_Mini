@@ -31,6 +31,8 @@ public class OrderPro {
 		FileWriter fw = new FileWriter("order.txt", true);
 		
 		Scanner scanner = new Scanner(System.in);
+		
+		while (true) {
 			
 		System.out.println("1. 상품 주문하기.");
 		System.out.println("2. 전체 주문 이력 보기.");
@@ -76,7 +78,7 @@ public class OrderPro {
 		    String formatDate = curDateTime.format(formatter);
 		    fw.write("주문 일시: " + formatDate + "\n");
 
-		    System.out.println("주문이 완료되었습니다!");
+		    System.out.println("주문이 완료되었습니다!\n");
 
 		    fw.flush();
 		    fw.close();
@@ -97,6 +99,8 @@ public class OrderPro {
 				}
 				System.out.println(lineString);
 			}
+		    
+		    System.out.println();
 			
 		}
 		
@@ -129,11 +133,15 @@ public class OrderPro {
 		
 		if (seleteNum == 5) {
 			System.out.println("프로그램을 종료합니다….");
+			break;
 		}
 		
 		// 오류 메시지 출력
 		if (check != true) {
-			System.out.println("번호를 잘못 입력했습니다.");
+			System.out.println("번호를 잘못 입력했습니다. 다시 선택해주세요.");
+			System.out.println();
+		}
+			
 		}
 
 	}
@@ -196,6 +204,7 @@ class Order {
 		
 		int numCheck = 0;
 		int priceCheck = 0;
+		int priNumCheck = 0;
 		
 		while (true) {
 			String lineString = br.readLine();
@@ -222,7 +231,7 @@ class Order {
 						// 그 중 배열 두 번째에 이름이 있을 테니
 						// 그게 scanner로 입력한 내용과 같으면
 						if (name.equals(nameCut[1])) {
-							numCheck++;
+							priNumCheck++;
 						}
 					}
 					
@@ -236,14 +245,23 @@ class Order {
 						priceCheck = priceCheck + pr;
 					}
 					
+					if (info.startsWith("제품 수량: ")) {
+						String[] numCut = info.split(": ");
+						int nc = Integer.parseInt(numCut[1]);
+						priNumCheck = nc;
+					}
+					
 				}
 				
 			}
 		    
 		}
 
-	    System.out.println("전체 주문 건수: " + numCheck);
-	    System.out.println("전체 주문 금액: " + priceCheck);
+	    System.out.println("전체 주문 건수: " + priNumCheck);
+	    System.out.println("전체 주문 금액: " + (priceCheck*priNumCheck));
+	    
+	    System.out.println();
+	    
 	    return;
 		
 	}
@@ -265,6 +283,8 @@ class Order {
 			}
 			
 		}
+	    
+	    System.out.println();
 		
 	}
 	
