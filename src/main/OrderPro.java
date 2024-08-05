@@ -24,7 +24,7 @@ public class OrderPro {
 
 		// 프로그램 시작 시 주문 번호 초기화
 		// 저장된 번호 중 가장 마지막 번호를 불러옴
-		Order.OrderNumCheck();
+		OrderNum.OrderNumCheck();
 		
 		// 주문 정보를 저장할 txt 파일 생성
 		// 파일명 뒤에 true 추가할 경우 [덮어쓰기]가 아니라 [이어쓰기]가 됨
@@ -50,7 +50,7 @@ public class OrderPro {
 		
 		if (seleteNum == 1) {
 
-		    Order Order = new Order();
+			OrderNum Order = new OrderNum();
 
 		    fw.write("주문 번호: " + Order.num + ", ");
 
@@ -113,7 +113,7 @@ public class OrderPro {
 		    System.out.print("고객명: ");
 		    String orderName = scanner.nextLine(); // 고객명
 		    
-		    Order.OrderNameCheck(orderName.trim());
+		    OrderName.OrderNameCheck(orderName.trim());
 		    
 		}
 		
@@ -127,7 +127,7 @@ public class OrderPro {
 		    System.out.print("날짜: ");
 		    String orderDate = scanner.nextLine(); // 날짜
 		    
-		    Order.OrderDateCheck(orderDate.trim());
+		    OrderDate.OrderDateCheck(orderDate.trim());
 			
 		}
 		
@@ -148,13 +148,13 @@ public class OrderPro {
 
 }
 
-class Order {
+class OrderNum {
 	
 	static int count = 0;
 	
 	int num; // 주문번호
 	
-	public Order() {
+	public OrderNum() {
 		count++;
 		num = count;
 	}
@@ -197,6 +197,10 @@ class Order {
 		
 	}
 	
+}
+
+class OrderName {
+
 	public static void OrderNameCheck(String name) throws IOException {
 		
 		FileReader fr = new FileReader("order.txt");
@@ -269,6 +273,10 @@ class Order {
 	    return;
 		
 	}
+}
+
+class OrderDate {
+
 	public static void OrderDateCheck(String date) throws IOException { 
 		
 		FileReader fr = new FileReader("order.txt");
