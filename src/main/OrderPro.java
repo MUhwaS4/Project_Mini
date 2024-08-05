@@ -213,6 +213,7 @@ class Order {
 				break;
 			}
 			
+			// 주문자명과 입력한 데이터가 동일한 내역(줄)만 불러옴
 			if (lineString.contains(name)) {
 				
 				// 읽은 데이터를 주문 번호/고객명/제품명/수량/금액/일시로 자르기
@@ -231,8 +232,16 @@ class Order {
 						// 그 중 배열 두 번째에 이름이 있을 테니
 						// 그게 scanner로 입력한 내용과 같으면
 						if (name.equals(nameCut[1])) {
-							priNumCheck++;
+							numCheck++;
 						}
+					}
+
+					// 만약 info 변수가 "고객명: "으로 시작한다면
+					if (info.startsWith("제품 수량: ")) {
+						String[] numCut = info.split(": ");
+						// 제품 수량을 변수에 저장해서 이후 금액에 사용
+						int nc = Integer.parseInt(numCut[1]);
+						priNumCheck = nc;
 					}
 					
 					// 만약 info 변수가 "제품 금액: "으로 시작한다면
@@ -242,13 +251,8 @@ class Order {
 						// 그 중 배열 두 번째에 금액이 있을 테니
 						// 그 금액을 숫자로 변환
 						int pr = Integer.parseInt(priceCut[1]);
-						priceCheck = priceCheck + pr;
-					}
-					
-					if (info.startsWith("제품 수량: ")) {
-						String[] numCut = info.split(": ");
-						int nc = Integer.parseInt(numCut[1]);
-						priNumCheck = nc;
+						// 총액 = 현재 총액 + (금액 * 수량)
+						priceCheck = priceCheck + (pr*priNumCheck);
 					}
 					
 				}
@@ -257,8 +261,8 @@ class Order {
 		    
 		}
 
-	    System.out.println("전체 주문 건수: " + priNumCheck);
-	    System.out.println("전체 주문 금액: " + (priceCheck*priNumCheck));
+	    System.out.println("전체 주문 건수: " + numCheck);
+	    System.out.println("전체 주문 금액: " + priceCheck);
 	    
 	    System.out.println();
 	    
